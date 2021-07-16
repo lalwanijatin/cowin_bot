@@ -1,0 +1,23 @@
+{
+        
+        "manifest_version": 2,
+        "name": "bot",
+        "version": "1.0.0",
+        "content_scripts": [
+            {
+                "matches": [
+                    "https://selfregistration.cowin.gov.in/*"
+                ],
+                "js": [
+                    "external_files/jquery.min.js",
+                    "external_files/bootstrap.min.js",
+                    "form.js",
+                    "contentScript.js"
+                ],
+                "css":[
+                    "external_files/bootstrap.min.css"
+                ]
+            }
+        ]
+    }
+    
