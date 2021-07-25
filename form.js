@@ -48,6 +48,9 @@ let timeslotind = window.localStorage.getItem("timeslot");
 let selected_button_checkbox = window.localStorage.getItem("selectedbuttoncheckboxes")
 let autorefreshinterval = window.localStorage.getItem("autorefreshinterval");
 
+// selected_button_checkbox is an array that contains selected keys of buttonCheckboxMapping json object
+
+// I want to add labels of selected keys of buttonCheckboxMapping json object to this checked_buttons array
 let checked_buttons = [];
 
 const setCheckedButtons = (selected_button_checkbox) => {
@@ -120,7 +123,6 @@ const createForm = () => {
 
     // basic styles : reused
     let textLabelStyles = "color: black";
-    let warnLabelStyles = "color: red";
 
     // parent div for form
     let wrapperDiv = document.createElement("div");
@@ -130,21 +132,15 @@ const createForm = () => {
     let mobileinputid = "data-mob";
     let mobileInput = createInput(mobileinputid, "", "number", mobilenumber, 'form-control');
     let mobileLabel = createLabel("mobileinputlabel", mobileinputid, "Mobile number", textLabelStyles);
-    let mobileNumberWarn = createWarningText(
-        "You will have to enter the 10th digit in the actual website form to proceed with automation.",
-        warnLabelStyles
-    )
 
     // pin code field
     let pincodeinputid = "pincodeinput";
     let pincodeinput = createInput(pincodeinputid, "", "number", pincode, 'form-control');
     let pincodelabel = createLabel("pincodeinputlabel", pincodeinputid, "PIN Code", textLabelStyles);
-    let pincodewarn = createWarningText("You will have to enter the 6th digit in the actual website form manually to proceed with automation.", warnLabelStyles);
 
     let autorefreshintervalid = "autorefreshintervalinput";
     let autorefreshintervalinput = createInput(autorefreshintervalid, "", "number", autorefreshinterval, 'form-control');
     let autorefreshintervallabel = createLabel("autorefreshintervallabel", autorefreshintervalid, "Refresh interval (seconds)", textLabelStyles);
-    let autorefreshintervalinputwarn = createWarningText("Setting this value to a very low number may cause too many refreshes in short time span leading to 'Something Went Wrong Errors'. Default = 15", warnLabelStyles);
     autorefreshintervalinput.min = 1;
 
     let timeslotinputid = "timeslotinput";
@@ -158,9 +154,8 @@ const createForm = () => {
     timeSlotSelector.appendChild(three)
     timeSlotSelector.appendChild(four)
     let timeslotlabel = createLabel("timeslotinputlabel", timeslotinputid, "Enter time slot preference: ", textLabelStyles);
-    let timeslotwarn = createWarningText("If the preferred slot is not available, first slot will be selected automatically.", warnLabelStyles);
 
-    let buttonCheckBoxes = []
+    let buttonCheckBoxes = [] // This array will contain all the checkbox elements wrapped in a div individually
     for (const key in buttonCheckboxMapping) {
         //wrapInDivWithClassName([wrapInDivWithClassName([age18CheckboxButton, age18CheckboxLabel], 'form-check')], 'col')
         let button = createInput(key, "", "checkbox", "", "form-check-input");
@@ -181,8 +176,8 @@ const createForm = () => {
 
     wrapperDiv.appendChild(wrapInDivWithClassName(
         [
-            wrapInDivWithClassName([timeslotlabel, timeSlotSelector, timeslotwarn], "col"),
-            wrapInDivWithClassName([autorefreshintervallabel, autorefreshintervalinput, autorefreshintervalinputwarn], 'col')
+            wrapInDivWithClassName([timeslotlabel, timeSlotSelector], "col"),
+            wrapInDivWithClassName([autorefreshintervallabel, autorefreshintervalinput], 'col')
         ], 'row mb-3'))
 
     wrapperDiv.appendChild(wrapInDivWithClassName([buttonCheckboxLabel].concat(buttonCheckBoxes), 'row mb-3'))
@@ -196,18 +191,6 @@ const wrapInDivWithClassName = (children, className) => {
     divWrapper.className = className;
     for (var i = 0; i < children.length; i++) divWrapper.appendChild(children[i])
     return divWrapper;
-}
-
-const createHideShowButton = () => {
-    $("#formWrapper").hide();
-    let formShowHide = document.createElement("button");
-    formShowHide.id = "formshowhidebutton";
-    formShowHide.appendChild(document.createTextNode("click to edit the autofill inputs"));
-    formShowHide.style = "background: red; position: sticky; top:0; left: 0; font-size: 32px; border-radius: 20px;";
-    document.body.appendChild(formShowHide);
-    $('#formshowhidebutton').on('click', () => {
-        $("#formWrapper").toggle();
-    })
 }
 
 const bindSubmitButtonToSaveInfo = () => {
@@ -246,7 +229,7 @@ const createModal = () => {
       <div class="modal-content">
         <div class="modal-header">
           
-          <div clsss="row">
+          <div class="row">
             <div class="col">
               <h5 class="modal-title">Autofill Input Form</h5>
             </div>
@@ -272,14 +255,14 @@ const createModal = () => {
 const createModalHideShowButton = () => {
     let wrapperDiv = document.createElement("div");
     let button = `
-    <button type="button" class="btn btn-danger btn-lg" style="position:absolute; top:2%; left: 2%;" data-bs-toggle="modal" data-bs-target="#form-modal"><span class="row"><span id="cb-btn-title">Edit Auto Fill Inputs</span><span id="cb-timer"></span></span></button>`
+    <button type="button" class="btn btn-danger btn-lg" style="position:absolute; top:2%; left: 2%;" data-bs-toggle="modal" data-bs-target="#form-modal"><span class="row"><span id="cb-btn-title">Edit Auto Fill Inputs</span></span></button>`
     wrapperDiv.innerHTML = button;
     document.body.appendChild(wrapperDiv);
 }
 
 
 const createFormAndOthers = () => {
-    createModal();
+    createModal(); // Model is nothing but a popup
     createModalHideShowButton();
     createForm();
     bindSubmitButtonToSaveInfo();

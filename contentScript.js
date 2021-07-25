@@ -21,17 +21,9 @@ const repFun = () => {
 
   // Checks if the mobile number field is present
   waitForEl("[formcontrolname=mobile_number]", function () {
-    $.ajax({
-      url: "https://api.countapi.xyz/hit/cowinbooking/logins4",
-    });
     // Enter mobile number which was taken from the user in the form
     $("[formcontrolname=mobile_number]").val(mobilenumber);
 
-    // wait for 0.1 seconds and dispatch an input event. We are dispatching the input event because we
-    // have used an input event listener in the next line.
-    setTimeout(() => {
-      $("[formcontrolname=mobile_number]")[0].dispatchEvent(new Event("input"));
-    }, 100);
 
     // on input event, check the length of the number added to the field.
     // if it is 10, trigger a click
@@ -40,6 +32,12 @@ const repFun = () => {
         $('.login-btn').trigger('click');
       }
     })
+
+    // wait for 0.1 seconds and dispatch an input event. We are dispatching the input event because we
+    // have used an input event listener in the next line.
+    setTimeout(() => {
+      $("[formcontrolname=mobile_number]")[0].dispatchEvent(new Event("input"));
+    }, 100);
   });
 
   // Checks if the otp field is present
@@ -109,8 +107,6 @@ const repFun = () => {
     }
   }
 
-
-
   // Checks if the pincode is present
   waitForEl("[formcontrolname=pincode]", function(){
     $("[formcontrolname=pincode]").on('input', (e) => {
@@ -137,6 +133,30 @@ const repFun = () => {
       }));
     }, 2000)
   })
+
+  // after clicking the slot
+  waitForEl('.appoint-success', () => {
+    
+    let timeslots = $('.time-slot');
+    let slotind = 0;
+    if (timeslots.length === 0) return;
+    if (timeslots.length === 4) {
+      try {
+        slotind = parseInt(timeslotind) - 1;
+      } catch (e) {
+        slotind = 0;
+      }
+    }
+    
+    try {
+      timeslots[slotind].click();
+      $("ion-button.confirm-btn").click();
+    } catch (e) {
+      console.log("Requested timeslot is not available.");
+    }
+  });
+
+
 }
 
 
